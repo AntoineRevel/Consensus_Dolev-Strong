@@ -1,11 +1,13 @@
 public class SharedData {
-    private final int numberOfByzantineNodes;
-    private final int numberOfNodes;
+    private int numberOfNodes;
+    private int numberOfByzantineNodes;
+    protected int numberOfRounds;
     private final Integer[][] communicationMatrix;
 
-    public SharedData(int numberOfNodes, int numberOfByzantineNodes) {
+    public SharedData(int numberOfNodes, int numberOfByzantineNodes, int numberOfRounds) {
         this.numberOfNodes = numberOfNodes;
         this.numberOfByzantineNodes = numberOfByzantineNodes;
+        this.numberOfRounds = numberOfRounds;
         communicationMatrix = new Integer[numberOfNodes][numberOfNodes];
     }
 
@@ -17,12 +19,7 @@ public class SharedData {
         return communicationMatrix[sender][receiver];
     }
 
-    public int getNumberOfByzantineNodes() {
-        return numberOfByzantineNodes;
+    public int getNumberOfRounds() {
+        return numberOfRounds;
     }
-
-    public int getNumberOfNodes() {
-        return numberOfNodes;
-    }
-
 }
