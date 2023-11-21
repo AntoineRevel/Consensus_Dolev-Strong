@@ -1,7 +1,10 @@
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class SharedData {
     private int numberOfNodes;
     private int numberOfByzantineNodes;
     protected int numberOfRounds;
+    private AtomicInteger currentRound = new AtomicInteger(0);
     private final Integer[][] communicationMatrix;
 
     public SharedData(int numberOfNodes, int numberOfByzantineNodes, int numberOfRounds) {
@@ -21,5 +24,12 @@ public class SharedData {
 
     public int getNumberOfRounds() {
         return numberOfRounds;
+    }
+
+    public int incrementRound() {
+        return currentRound.incrementAndGet();
+    }
+    public int getCurrentRound() {
+        return currentRound.get();
     }
 }

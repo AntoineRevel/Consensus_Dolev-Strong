@@ -2,8 +2,8 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
 public abstract class Node implements Runnable {
-    private final int id;
-    private final SharedData sharedData;
+    protected final int id;
+    protected final SharedData sharedData;
     private final CyclicBarrier roundBarrier;
 
     public Node(int id, SharedData sharedData, CyclicBarrier roundBarrier) {

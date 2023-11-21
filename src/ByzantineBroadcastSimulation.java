@@ -7,6 +7,7 @@ public class ByzantineBroadcastSimulation {
     private final Protocols protocol;
 
     public ByzantineBroadcastSimulation(int numberOfNodes, int numberOfByzantineNodes, Protocols protocol) {
+        //TODO verifie si numberOfNodes > numberOfByzantineNodes
         this.numberOfNodes = numberOfNodes;
         this.numberOfByzantineNodes = numberOfByzantineNodes;
         this.protocol = protocol;
