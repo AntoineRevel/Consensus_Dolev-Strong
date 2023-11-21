@@ -7,7 +7,9 @@ public class ByzantineBroadcastSimulation {
     private final Protocols protocol;
 
     public ByzantineBroadcastSimulation(int numberOfNodes, int numberOfByzantineNodes, Protocols protocol) {
-        //TODO verifie si numberOfNodes > numberOfByzantineNodes
+        if (numberOfNodes < numberOfByzantineNodes) {
+            throw new IllegalArgumentException("The total number of nodes must be greater than the number of Byzantine nodes.");
+        }
         this.numberOfNodes = numberOfNodes;
         this.numberOfByzantineNodes = numberOfByzantineNodes;
         this.protocol = protocol;
@@ -30,15 +32,10 @@ public class ByzantineBroadcastSimulation {
     }
 
     private NodeFactory createFactory(Protocols protocol) {
-        switch (protocol) {
-            case SIMPLE_PROTOCOL:
-                return new SimpleProtocolFactory(numberOfNodes, numberOfByzantineNodes);
-            case DOLAV_STRONG:
-
-            default:
-                throw new IllegalArgumentException("Unrecognized protocol type");
-        }
+        return switch (protocol) {
+            case SIMPLE_PROTOCOL -> new SimpleProtocolFactory(numberOfNodes, numberOfByzantineNodes);
+            default -> throw new IllegalArgumentException("Unrecognized protocol type");
+        };
     }
-
-
 }
+

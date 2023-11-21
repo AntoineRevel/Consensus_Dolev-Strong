@@ -7,7 +7,7 @@ public class SimpleProtocolNode extends Node {
 
     @Override
     protected void executeProtocol() {
-        System.out.println(super.id + " | " + super.sharedData.getCurrentRound());
+        System.out.println(super.id + " | " + super.sharedData.getCurrentRound() + " ,leader : " + super.isLeader);
 
     }
 }
