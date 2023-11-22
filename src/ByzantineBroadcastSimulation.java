@@ -17,7 +17,7 @@ public class ByzantineBroadcastSimulation {
     }
 
     public void startSimulation() {
-        NodeFactory factory = createFactory(protocol);
+        AbstractNodeFactory factory = createFactory(protocol);
 
         for (int i = 0; i < numberOfNodes; i++) {
             INode node;
@@ -31,7 +31,7 @@ public class ByzantineBroadcastSimulation {
         executor.shutdown();
     }
 
-    private NodeFactory createFactory(Protocols protocol) {
+    private AbstractNodeFactory createFactory(Protocols protocol) {
         return switch (protocol) {
             case SIMPLE_PROTOCOL -> new SimpleProtocolFactory(numberOfNodes, numberOfByzantineNodes);
             default -> throw new IllegalArgumentException("Unrecognized protocol type");

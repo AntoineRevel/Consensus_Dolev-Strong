@@ -4,14 +4,14 @@ import java.util.Objects;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
-public abstract class Node implements INode{
+public abstract class AbstractNode implements INode{
     protected final int id;
     protected final boolean isLeader;
     protected final SharedData sharedData;
     private final CyclicBarrier roundBarrier;
     protected final BBVerificator verificator;
 
-    public Node(int id, SharedData sharedData, CyclicBarrier roundBarrier, BBVerificator verificator) {
+    public AbstractNode(int id, SharedData sharedData, CyclicBarrier roundBarrier, BBVerificator verificator) {
         this.id = id;
         this.isLeader = sharedData.getLeaderId() == id;
         this.sharedData = sharedData;
@@ -89,7 +89,4 @@ public abstract class Node implements INode{
         }
     }
 
-    public abstract void executeProtocol();
-
-    public abstract ConsensusValue endPhase();
 }

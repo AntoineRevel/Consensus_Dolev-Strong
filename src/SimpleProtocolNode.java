@@ -1,6 +1,6 @@
 import java.util.concurrent.CyclicBarrier;
 
-public class SimpleProtocolNode extends Node {
+public class SimpleProtocolNode extends AbstractNode {
     public SimpleProtocolNode(int id, SharedData sharedData, CyclicBarrier roundBarrier, BBVerificator verificator) {
         super(id, sharedData, roundBarrier, verificator);
     }

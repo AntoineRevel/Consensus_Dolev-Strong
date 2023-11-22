@@ -1,4 +1,4 @@
-public class SimpleProtocolFactory extends NodeFactory {
+public class SimpleProtocolFactory extends AbstractNodeFactory {
 
     public SimpleProtocolFactory(int numberOfNodes, int numberOfByzantineNodes) {
         super(numberOfNodes, numberOfByzantineNodes);
@@ -10,7 +10,7 @@ public class SimpleProtocolFactory extends NodeFactory {
     }
 
     @Override
-    public Node createHonestNode(int id) {
+    public AbstractNode createHonestNode(int id) {
         return new SimpleProtocolNode(id, super.sharedData, super.roundBarrier, super.verificator);
     }
 
