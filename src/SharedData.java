@@ -3,10 +3,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SharedData {
     private final int numberOfNodes;
     private final int numberOfByzantineNodes;
+    private int leaderId = 0;
     protected final int numberOfRounds;
     private final AtomicInteger currentRound = new AtomicInteger(-1);
     private final ConsensusValue[][] communicationMatrix;
-    private int leaderId = 0;
+
 
     public SharedData(int numberOfNodes, int numberOfByzantineNodes, int numberOfRounds) {
         this.numberOfNodes = numberOfNodes;
@@ -36,7 +37,7 @@ public class SharedData {
     }
 
     public int getCurrentRound() {
-        return currentRound.get();
+        return currentRound.get()+1;
     }
 
     public int getLeaderId() {

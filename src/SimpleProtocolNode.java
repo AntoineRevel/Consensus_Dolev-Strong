@@ -7,9 +7,11 @@ public class SimpleProtocolNode extends Node {
 
     @Override
     protected void executeProtocol() {
-        System.out.println(Thread.currentThread().getName() +" : "+super.id + " | " + super.sharedData.getCurrentRound() + " ,leader : " + super.isLeader);
+        System.out.println(Thread.currentThread().getName() +" : "+super.id + " | " + super.sharedData.getCurrentRound() + " " + (super.isLeader ? " Leader ":""));
+    }
 
-        System.out.println(super.reedMessage(sharedData.getLeaderId()));
-
+    @Override
+    protected ConsensusValue endPhase(){
+        return super.reedMessage(sharedData.getLeaderId());
     }
 }

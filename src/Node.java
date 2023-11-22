@@ -5,23 +5,23 @@ import java.util.concurrent.CyclicBarrier;
 public abstract class Node implements Runnable {
     protected final int id;
     protected final boolean isLeader;
-    protected ConsensusValue inputValue;
+    protected ConsensusValue outputValue; //in verificationCallss
     protected final SharedData sharedData;
     private final CyclicBarrier roundBarrier;
 
     public Node(int id, SharedData sharedData, CyclicBarrier roundBarrier) {
         this.id = id;
-        this.isLeader = sharedData.getLeaderId()==id;
+        this.isLeader = sharedData.getLeaderId() == id;
         this.sharedData = sharedData;
         this.roundBarrier = roundBarrier;
     }
 
-    protected void sendMessage(int receiver, ConsensusValue message){
-        sharedData.sendMessage(id,receiver,message);
+    protected void sendMessage(int receiver, ConsensusValue message) {
+        sharedData.sendMessage(id, receiver, message);
     }
 
-    protected ConsensusValue reedMessage(int sender){
-        return sharedData.reedMessage(sender,id);
+    protected ConsensusValue reedMessage(int sender) {
+        return sharedData.reedMessage(sender, id);
     }
 
     private void broadcast(ConsensusValue message) {
@@ -31,9 +31,10 @@ public abstract class Node implements Runnable {
             }
         }
     }
+
     private void startPhase() {
         if (isLeader) {
-            inputValue = new Random().nextBoolean() ? ConsensusValue.R : ConsensusValue.B;
+            ConsensusValue inputValue = new Random().nextBoolean() ? ConsensusValue.R : ConsensusValue.B; //set verificationClass
             System.out.println("Leader (Node ID: " + id + ") has set the input value to " + inputValue);
             broadcast(inputValue);
         }
@@ -49,6 +50,9 @@ public abstract class Node implements Runnable {
             executeProtocol();
             waitForOthers();
         }
+
+        outputValue = endPhase();
+        System.out.println(outputValue); //set verification Class
     }
 
     private void waitForOthers() {
@@ -61,4 +65,6 @@ public abstract class Node implements Runnable {
     }
 
     protected abstract void executeProtocol();
+
+    protected abstract ConsensusValue endPhase();
 }

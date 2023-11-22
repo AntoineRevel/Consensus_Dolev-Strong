@@ -5,7 +5,7 @@ public class SimpleProtocolFactory extends NodeFactory {
     }
 
     @Override
-    int getNumberOfRounds() {
+    protected int getNumberOfRounds() {
         return 1;
     }
 

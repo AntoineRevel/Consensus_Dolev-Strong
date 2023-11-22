@@ -10,7 +10,10 @@ public abstract class NodeFactory {
         this.roundBarrier = new CyclicBarrier(numberOfNodes, () -> System.out.println("End of round " + sharedData.incrementRound()));
     }
 
-    abstract int getNumberOfRounds();
+    protected SharedData getSharedData() {
+        return sharedData;
+    }
+    protected abstract int getNumberOfRounds();
 
     public abstract Node createHonestNode(int id);
 
