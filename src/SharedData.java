@@ -44,6 +44,10 @@ public class SharedData {
         return leaderId;
     }
 
+    public int getNumberOfByzantineNodes() {
+        return numberOfByzantineNodes;
+    }
+
     public void setLeaderId(int leaderId) {
         this.leaderId = leaderId;
     }

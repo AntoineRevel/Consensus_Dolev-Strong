@@ -1,3 +1,6 @@
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
@@ -34,10 +37,25 @@ public abstract class Node implements Runnable {
 
     private void startPhase() {
         if (isLeader) {
-            ConsensusValue inputValue = new Random().nextBoolean() ? ConsensusValue.R : ConsensusValue.B; //set verificationClass
+            ConsensusValue inputValue = getDeterministicConsensusValue();
             System.out.println("Leader (Node ID: " + id + ") has set the input value to " + inputValue);
             broadcast(inputValue);
         }
+    }
+
+    private ConsensusValue getDeterministicConsensusValue() {
+        List<ConsensusValue> validValues = Arrays.stream(ConsensusValue.values())
+                .filter(value -> value != ConsensusValue.BOTTOM)
+                .toList();
+
+        int hash = calculateConfigurationHash();
+
+        //Use hash to deterministically choose a value from the enum, except BOTTOM
+        return validValues.get(Math.abs(hash) % validValues.size());
+    }
+
+    private int calculateConfigurationHash() {
+        return Objects.hash(sharedData.getNumberOfNodes(), sharedData.getNumberOfByzantineNodes(), sharedData.getNumberOfRounds());
     }
 
     @Override
