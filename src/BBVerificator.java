@@ -12,8 +12,8 @@ public class BBVerificator {
         this.leaderInputValue = inputValue;
     }
 
-    public synchronized void setNodeHonest(int id, boolean isHonest) {
-        areNodesHonest[id] = isHonest;
+    public synchronized void setNodeHonest(int id) {
+        areNodesHonest[id] = true;
     }
 
     public synchronized void setOutputValue(int id, ConsensusValue value) {

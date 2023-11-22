@@ -20,7 +20,7 @@ public class ByzantineBroadcastSimulation {
         NodeFactory factory = createFactory(protocol);
 
         for (int i = 0; i < numberOfNodes; i++) {
-            Node node;
+            INode node;
             if (i < numberOfByzantineNodes) {
                 node = factory.createByzantineNode(i);
             } else {

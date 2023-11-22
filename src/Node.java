@@ -4,18 +4,19 @@ import java.util.Objects;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
-public abstract class Node implements Runnable {
+public abstract class Node implements INode{
     protected final int id;
     protected final boolean isLeader;
-    protected ConsensusValue outputValue; //in verificationCallss
     protected final SharedData sharedData;
     private final CyclicBarrier roundBarrier;
+    protected final BBVerificator verificator;
 
-    public Node(int id, SharedData sharedData, CyclicBarrier roundBarrier) {
+    public Node(int id, SharedData sharedData, CyclicBarrier roundBarrier, BBVerificator verificator) {
         this.id = id;
         this.isLeader = sharedData.getLeaderId() == id;
         this.sharedData = sharedData;
         this.roundBarrier = roundBarrier;
+        this.verificator = verificator;
     }
 
     protected void sendMessage(int receiver, ConsensusValue message) {
@@ -34,14 +35,17 @@ public abstract class Node implements Runnable {
         }
     }
 
-    private void startPhase() {
-        if (isLeader) {
+    public void startPhase() {
+        if (isLeader) { //TODO check if first imput recei from Leader ?
             ConsensusValue inputValue = getDeterministicConsensusValue();
             System.out.println("Leader (Node ID: " + id + ") has set the input value to " + inputValue);
             broadcast(inputValue);
         }
     }
 
+    /**
+     * Use hash to deterministically choose a value from the enum, except BOTTOM
+     */
     private ConsensusValue getDeterministicConsensusValue() {
         List<ConsensusValue> validValues = Arrays.stream(ConsensusValue.values())
                 .filter(value -> value != ConsensusValue.BOTTOM)
@@ -49,7 +53,6 @@ public abstract class Node implements Runnable {
 
         int hash = calculateConfigurationHash();
 
-        //Use hash to deterministically choose a value from the enum, except BOTTOM
         return validValues.get(Math.abs(hash) % validValues.size());
     }
 
@@ -59,6 +62,11 @@ public abstract class Node implements Runnable {
 
     @Override
     public void run() {
+        if (!(this instanceof IByzantineNode)) {
+            verificator.setNodeHonest(id);
+            System.out.println(id + " je suis honnette");
+        }
+
         startPhase();
         waitForOthers();
 
@@ -68,8 +76,8 @@ public abstract class Node implements Runnable {
             waitForOthers();
         }
 
-        outputValue = endPhase();
-        System.out.println(outputValue); //set verification Class
+        ConsensusValue outputValue = endPhase();
+        verificator.setOutputValue(id, outputValue);
     }
 
     private void waitForOthers() {
@@ -81,7 +89,7 @@ public abstract class Node implements Runnable {
         }
     }
 
-    protected abstract void executeProtocol();
+    public abstract void executeProtocol();
 
-    protected abstract ConsensusValue endPhase();
+    public abstract ConsensusValue endPhase();
 }

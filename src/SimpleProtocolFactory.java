@@ -11,11 +11,11 @@ public class SimpleProtocolFactory extends NodeFactory {
 
     @Override
     public Node createHonestNode(int id) {
-        return new SimpleProtocolNode(id, super.sharedData, super.roundBarrier);
+        return new SimpleProtocolNode(id, super.sharedData, super.roundBarrier, super.verificator);
     }
 
     @Override
-    public Node createByzantineNode(int id) {
-        return new SimpleProtocolNode(id, super.sharedData, super.roundBarrier);
+    public IByzantineNode createByzantineNode(int id) {
+        return new ByzantineSimpleProtocolNode(id, super.sharedData, super.roundBarrier, super.verificator);
     }
 }

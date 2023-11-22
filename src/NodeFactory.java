@@ -3,11 +3,13 @@ import java.util.concurrent.CyclicBarrier;
 public abstract class NodeFactory {
     protected SharedData sharedData;
     protected CyclicBarrier roundBarrier;
+    protected BBVerificator verificator;
 
     public NodeFactory(int numberOfNodes, int numberOfByzantineNodes) {
         int numberOfRounds = getNumberOfRounds();
         this.sharedData = new SharedData(numberOfNodes, numberOfByzantineNodes, numberOfRounds);
         this.roundBarrier = new CyclicBarrier(numberOfNodes, this::handleRoundCompletion);
+        this.verificator = new BBVerificator(numberOfNodes);
     }
 
     private void handleRoundCompletion() {
@@ -25,5 +27,5 @@ public abstract class NodeFactory {
 
     public abstract Node createHonestNode(int id);
 
-    public abstract Node createByzantineNode(int id);
+    public abstract IByzantineNode createByzantineNode(int id);
 }
