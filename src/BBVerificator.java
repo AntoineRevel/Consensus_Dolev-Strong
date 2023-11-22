@@ -33,19 +33,48 @@ public class BBVerificator {
                 }
             }
         }
-        System.out.println("Termination property satisfied: All honest nodes have output values.");
+        System.out.printf("Termination property satisfied: %s", "All honest nodes have output values.");//t.println(String.format("%-" + maxPrefixLength + "s %s", terminationPrefix, "All honest nodes have output values."));
         return true;
     }
 
     private boolean checkAgreement() {
-        return false;
+        ConsensusValue firstHonestNodeValue = null;
+        for (int i = 0; i < areNodesHonest.length; i++) {
+            if (areNodesHonest[i]) {
+                if (firstHonestNodeValue == null) {
+                    firstHonestNodeValue = outputValues[i];
+                } else if (outputValues[i] != firstHonestNodeValue) {
+                    System.out.println("Agreement property not satisfied: Honest nodes " + i + " have different output values.");
+                    return false;
+                }
+            }
+        }
+
+        if (firstHonestNodeValue == null) {
+            System.out.println("Agreement property could not be verified: No output values from honest nodes.");
+            return true;
+        }
+
+        System.out.println("Agreement property satisfied: All honest nodes have the same output value.");
+        return true;
     }
 
     private boolean checkValidity() {
-        if (leaderInputValue != null) {
-
+        if (leaderInputValue == null) {
+            System.out.println("Validity property cannot be verified: Leader is not honest or leader's input value is not set.");
+            return true;
         }
-        return false;
+
+        for (int i = 0; i < areNodesHonest.length; i++) {
+            if (areNodesHonest[i] && outputValues[i] != leaderInputValue) {
+                System.out.println("Validity property not satisfied: An honest node has a different output value than the leader's input value.");
+                return false;
+            }
+        }
+
+        System.out.println("Validity property satisfied: All honest nodes have the same output value as the leader's input value.");
+        return true;
+
     }
 
     public boolean verifyBB() {
