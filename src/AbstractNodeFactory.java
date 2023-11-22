@@ -27,6 +27,6 @@ public abstract class AbstractNodeFactory {
 
     public abstract AbstractNode createHonestNode(int id);
 
-    public abstract AbstractByzantineNode createByzantineNode(int id);
+    public abstract IByzantineNode createByzantineNode(int id);
 }
 

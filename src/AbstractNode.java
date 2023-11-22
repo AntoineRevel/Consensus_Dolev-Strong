@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
-public abstract class AbstractNode implements Runnable {
+public abstract class AbstractNode implements INode {
     protected final int id;
     protected final boolean isLeader;
     protected final SharedData sharedData;
@@ -35,6 +35,9 @@ public abstract class AbstractNode implements Runnable {
         }
     }
 
+    /**
+     * Leader chooses an initial input value and sends it to all other nodes.
+     */
     public void startPhase() {
         if (isLeader) { //TODO check if first imput recei from Leader ?
             ConsensusValue inputValue = getDeterministicConsensusValue();
@@ -71,7 +74,7 @@ public abstract class AbstractNode implements Runnable {
 
     @Override
     public void run() {
-        if (!(this instanceof AbstractByzantineNode)) {
+        if (!(this instanceof IByzantineNode)) {
             verificator.setNodeHonest(id);
             System.out.println(id + " je suis honnette");
         }
@@ -89,7 +92,16 @@ public abstract class AbstractNode implements Runnable {
         verificator.setOutputValue(id, outputValue);
     }
 
+    /**
+     * Executes the node's specific actions during each round of the protocol.
+     */
     protected abstract void executeProtocol();
+
+    /**
+     * Node's decision rules at the end of the simulation, determines its final output.
+     *
+     * @return The final output value of the node.
+     */
     protected abstract ConsensusValue endPhase();
 
 }
