@@ -5,7 +5,7 @@ public class SharedData {
     private final int numberOfByzantineNodes;
     private int leaderId = 0;
     protected final int numberOfRounds;
-    private final AtomicInteger currentRound = new AtomicInteger(-1);
+    private final AtomicInteger currentRound = new AtomicInteger(0);
     private final ConsensusValue[][] communicationMatrix;
 
 
@@ -37,7 +37,7 @@ public class SharedData {
     }
 
     public int getCurrentRound() {
-        return currentRound.get()+1;
+        return currentRound.get();
     }
 
     public int getLeaderId() {
