@@ -4,23 +4,27 @@ public class SharedData {
     private final int numberOfNodes;
     private final int numberOfByzantineNodes;
     protected final int numberOfRounds;
-    private final AtomicInteger currentRound = new AtomicInteger(0);
-    private final Integer[][] communicationMatrix;
+    private final AtomicInteger currentRound = new AtomicInteger(-1);
+    private final ConsensusValue[][] communicationMatrix;
     private int leaderId = 0;
 
     public SharedData(int numberOfNodes, int numberOfByzantineNodes, int numberOfRounds) {
         this.numberOfNodes = numberOfNodes;
         this.numberOfByzantineNodes = numberOfByzantineNodes;
         this.numberOfRounds = numberOfRounds;
-        communicationMatrix = new Integer[numberOfNodes][numberOfNodes];
+        communicationMatrix = new ConsensusValue[numberOfNodes][numberOfNodes];
     }
 
-    public synchronized void sendMessage(int sender, int receiver, Integer message) {
+    public synchronized void sendMessage(int sender, int receiver, ConsensusValue message) {
         communicationMatrix[sender][receiver] = message;
     }
 
-    public synchronized Integer receiveMessage(int sender, int receiver) {
+    public synchronized ConsensusValue reedMessage(int sender, int receiver) {
         return communicationMatrix[sender][receiver];
+    }
+
+    public int getNumberOfNodes() {
+        return numberOfNodes;
     }
 
     public int getNumberOfRounds() {
@@ -38,6 +42,7 @@ public class SharedData {
     public int getLeaderId() {
         return leaderId;
     }
+
     public void setLeaderId(int leaderId) {
         this.leaderId = leaderId;
     }
