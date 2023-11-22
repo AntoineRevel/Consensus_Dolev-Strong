@@ -15,7 +15,7 @@ public class SimpleProtocolFactory extends AbstractNodeFactory {
     }
 
     @Override
-    public IByzantineNode createByzantineNode(int id) {
+    public AbstractByzantineNode createByzantineNode(int id) {
         return new ByzantineSimpleProtocolNode(id, super.sharedData, super.roundBarrier, super.verificator);
     }
 }

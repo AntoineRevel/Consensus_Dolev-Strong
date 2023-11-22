@@ -1,6 +1,8 @@
 import java.util.concurrent.CyclicBarrier;
 
-public class ByzantineSimpleProtocolNode extends SimpleProtocolNode implements IByzantineNode{
+public class ByzantineSimpleProtocolNode extends AbstractByzantineNode{
+
+    //use SimpleProtocolNode
     public ByzantineSimpleProtocolNode(int id, SharedData sharedData, CyclicBarrier roundBarrier, BBVerificator verificator) {
         super(id, sharedData, roundBarrier, verificator);
     }

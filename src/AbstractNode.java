@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
-public abstract class AbstractNode implements INode{
+public abstract class AbstractNode implements Runnable {
     protected final int id;
     protected final boolean isLeader;
     protected final SharedData sharedData;
@@ -60,9 +60,18 @@ public abstract class AbstractNode implements INode{
         return Objects.hash(sharedData.getNumberOfNodes(), sharedData.getNumberOfByzantineNodes(), sharedData.getNumberOfRounds());
     }
 
+    private void waitForOthers() {
+        try {
+            roundBarrier.await();
+        } catch (InterruptedException | BrokenBarrierException e) {
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
+    }
+
     @Override
     public void run() {
-        if (!(this instanceof IByzantineNode)) {
+        if (!(this instanceof AbstractByzantineNode)) {
             verificator.setNodeHonest(id);
             System.out.println(id + " je suis honnette");
         }
@@ -80,13 +89,7 @@ public abstract class AbstractNode implements INode{
         verificator.setOutputValue(id, outputValue);
     }
 
-    private void waitForOthers() {
-        try {
-            roundBarrier.await();
-        } catch (InterruptedException | BrokenBarrierException e) {
-            e.printStackTrace();
-            Thread.currentThread().interrupt();
-        }
-    }
+    protected abstract void executeProtocol();
+    protected abstract ConsensusValue endPhase();
 
 }
