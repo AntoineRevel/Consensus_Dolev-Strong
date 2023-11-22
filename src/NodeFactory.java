@@ -7,8 +7,19 @@ public abstract class NodeFactory {
     public NodeFactory(int numberOfNodes, int numberOfByzantineNodes) {
         int numberOfRounds = getNumberOfRounds();
         this.sharedData = new SharedData(numberOfNodes, numberOfByzantineNodes, numberOfRounds);
-        this.roundBarrier = new CyclicBarrier(numberOfNodes, () -> System.out.println(" --- End of round " + sharedData.getCurrentRound() +" --- \n\n        Round "+sharedData.incrementRound()));
-        //TODO if round=0 -> starting , if round > numberOfRounds ->decision
+        this.roundBarrier = new CyclicBarrier(numberOfNodes, this::handleRoundCompletion);
+    }
+
+    private void handleRoundCompletion() {
+        int currentRound = sharedData.getCurrentRound();
+        System.out.println("--- End of round " + currentRound + " --- \n");
+
+        if (currentRound == 0) {
+            System.out.println("--- Start round(s) --- ");
+        } else if (currentRound == sharedData.getNumberOfRounds()) {
+            System.out.println(" --- Making final decision --- ");
+        }
+        sharedData.incrementRound();
     }
 
     protected SharedData getSharedData() {
