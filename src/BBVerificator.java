@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class BBVerificator {
     private ConsensusValue leaderInputValue;
     private final boolean[] areNodesHonest;
@@ -20,15 +22,22 @@ public class BBVerificator {
         outputValues[id] = value;
     }
 
-    public boolean verifyBB() {
-        return checkTermination() && checkAgreement() && checkValidity();
+    private boolean checkTermination() {
+        System.out.println(Arrays.toString(areNodesHonest));
+        System.out.println(Arrays.toString(outputValues));
+        for (int i = 0; i < areNodesHonest.length; i++) {
+            if (areNodesHonest[i]) {
+                if (outputValues[i] == null) {
+                    System.out.println("Termination property not satisfied: Honest node " + i + " has no output value.");
+                    return false;
+                }
+            }
+        }
+        System.out.println("Termination property satisfied: All honest nodes have output values.");
+        return true;
     }
 
     private boolean checkAgreement() {
-        return false;
-    }
-
-    private boolean checkTermination() {
         return false;
     }
 
@@ -38,4 +47,10 @@ public class BBVerificator {
         }
         return false;
     }
+
+    public boolean verifyBB() {
+        return checkTermination() && checkAgreement() && checkValidity();
+    }
+
+
 }

@@ -29,6 +29,14 @@ public class ByzantineBroadcastSimulation {
             executor.submit(node);
         }
         executor.shutdown();
+
+        try {
+            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        factory.getVerificator().verifyBB();
     }
 
     private AbstractNodeFactory createFactory(Protocols protocol) {

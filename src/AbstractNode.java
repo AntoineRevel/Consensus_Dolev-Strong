@@ -29,9 +29,7 @@ public abstract class AbstractNode implements INode {
 
     private void broadcast(ConsensusValue message) {
         for (int receiver = 0; receiver < sharedData.getNumberOfNodes(); receiver++) {
-            if (receiver != id) {
                 sendMessage(receiver, message);
-            }
         }
     }
 
@@ -41,8 +39,8 @@ public abstract class AbstractNode implements INode {
     public void startPhase() {
         if (isLeader) { //TODO check if first imput recei from Leader ?
             ConsensusValue inputValue = getDeterministicConsensusValue();
-            System.out.println("Leader (Node ID: " + id + ") has set the input value to " + inputValue);
             broadcast(inputValue);
+            verificator.setLeaderInputValue(inputValue);
         }
     }
 

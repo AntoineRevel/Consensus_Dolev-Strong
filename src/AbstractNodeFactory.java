@@ -23,10 +23,12 @@ public abstract class AbstractNodeFactory {
         }
     }
 
+    public BBVerificator getVerificator() {
+        return verificator;
+    }
+
     protected abstract int getNumberOfRounds();
-
     public abstract AbstractNode createHonestNode(int id);
-
     public abstract IByzantineNode createByzantineNode(int id);
 }
 
