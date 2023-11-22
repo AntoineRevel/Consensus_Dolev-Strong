@@ -32,13 +32,10 @@ public class SharedData {
         return numberOfRounds;
     }
 
-    public int incrementRound() {
-        return currentRound.incrementAndGet();
+    public int getAndIncrementRound() {
+        return currentRound.getAndIncrement();
     }
 
-    public int getCurrentRound() {
-        return currentRound.get();
-    }
 
     public int getLeaderId() {
         return leaderId;

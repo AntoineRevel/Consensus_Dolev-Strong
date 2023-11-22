@@ -11,7 +11,7 @@ public abstract class NodeFactory {
     }
 
     private void handleRoundCompletion() {
-        int currentRound = sharedData.getCurrentRound();
+        int currentRound = sharedData.getAndIncrementRound();
         System.out.println("--- End of round " + currentRound + " --- \n");
 
         if (currentRound == 0) {
@@ -19,12 +19,8 @@ public abstract class NodeFactory {
         } else if (currentRound == sharedData.getNumberOfRounds()) {
             System.out.println(" --- Making final decision --- ");
         }
-        sharedData.incrementRound();
     }
 
-    protected SharedData getSharedData() {
-        return sharedData;
-    }
     protected abstract int getNumberOfRounds();
 
     public abstract Node createHonestNode(int id);
