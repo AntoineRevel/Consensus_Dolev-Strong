@@ -4,7 +4,7 @@ public class BBVerificator {
     private ConsensusValue leaderInputValue;
     private final boolean[] areNodesHonest;
     private final ConsensusValue[] outputValues;
-    private final int alignmentWidth = 10;
+    private final int alignmentWidth = 13;
 
     public BBVerificator(int numberOfNodes) {
         this.areNodesHonest = new boolean[numberOfNodes];
@@ -88,8 +88,14 @@ public class BBVerificator {
     }
 
     public boolean verifyBB() {
-        return checkTermination() && checkAgreement() && checkValidity();
+        boolean terminationCheck = checkTermination();
+        boolean agreementCheck = checkAgreement();
+        boolean validityCheck = checkValidity();
+
+        System.out.println();
+        return terminationCheck && agreementCheck && validityCheck;
     }
+
 
 
 }
