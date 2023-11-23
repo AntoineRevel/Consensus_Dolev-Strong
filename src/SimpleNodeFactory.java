@@ -5,11 +5,11 @@ public class SimpleNodeFactory extends AbstractNodeFactory {
 
     @Override
     public AbstractNode createHonestNode(int id) {
-        return new SimpleNode(id, super.sharedData, super.roundBarrier, super.verificator);
+        return new SimpleNode(id, sharedData, roundBarrier, verificator);
     }
 
     @Override
     public IByzantineNode createByzantineNode(int id) {
-        return new ByzantineSimpleNode(id, super.sharedData, super.roundBarrier, super.verificator);
+        return new ByzantineSimpleNode(id, sharedData, roundBarrier, verificator);
     }
 }

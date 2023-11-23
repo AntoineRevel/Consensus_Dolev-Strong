@@ -118,7 +118,7 @@ public abstract class AbstractNode implements INode {
     protected abstract ConsensusValue endPhase();
 
 
-    protected void startPhaseByzantine1() {
+    protected void ByzantineStartPhase() {
         if (isLeader) {
             ConsensusValue[] allValues = ConsensusValue.values();
             int numberOfNodes = sharedData.getNumberOfNodes();
@@ -126,6 +126,7 @@ public abstract class AbstractNode implements INode {
             for (int i = 0; i < numberOfNodes; i++) {
                 ConsensusValue valueToSend = allValues[i % allValues.length];
                 sendMessage(i, valueToSend);
+                System.out.println(id+": Sending "+valueToSend +" to "+ i);
             }
         }
     }

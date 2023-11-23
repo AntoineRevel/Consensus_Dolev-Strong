@@ -7,7 +7,6 @@ public class ByzantineSimpleNode extends SimpleNode implements IByzantineNode {
 
     @Override
     protected void startPhase() {
-        super.startPhaseByzantine1();
+        ByzantineStartPhase();
     }
-
 }

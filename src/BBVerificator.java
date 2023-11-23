@@ -40,6 +40,26 @@ public class BBVerificator {
     }
 
     /**
+     * Check if all honest nodes have the same output value as the leader's input value.
+     */
+    private boolean checkValidity() {
+        if (leaderInputValue == null) {
+            System.out.printf("%-" + alignmentWidth + "s %s%n", "Validity:", "\u001B[32mOK\u001B[0m Leader is a byzantine node.");
+            return true;
+        }
+
+        for (int i = 0; i < areNodesHonest.length; i++) {
+            if (areNodesHonest[i] && outputValues[i] != leaderInputValue) {
+                System.out.printf("%-" + alignmentWidth + "s %s%n", "Validity:", "\u001B[31mKO\u001B[0m An honest node has a different output value than the leader's input value.");
+                return false;
+            }
+        }
+
+        System.out.printf("%-" + alignmentWidth + "s %s%n", "Validity:", "\u001B[32mOK\u001B[0m");
+        return true;
+    }
+
+    /**
      * Check if all honest nodes have the same output value.
      */
     private boolean checkAgreement() {
@@ -59,27 +79,7 @@ public class BBVerificator {
             System.out.printf("%-" + alignmentWidth + "s %s%n", "Agreement:", "\u001B[32mOK\u001B[0m No output values from honest nodes.");
             return true;
         }
-        System.out.printf("%-" + alignmentWidth + "s %s%n", "Agreement:", "\u001B[32mOK\u001B[0m");
-        return true;
-    }
-
-    /**
-     * Check if all honest nodes have the same output value as the leader's input value.
-     */
-    private boolean checkValidity() {
-        if (leaderInputValue == null) {
-            System.out.printf("%-" + alignmentWidth + "s %s%n", "Validity:", "\u001B[32mOK\u001B[0m Leader is a byzantine node.");
-            return true;
-        }
-
-        for (int i = 0; i < areNodesHonest.length; i++) {
-            if (areNodesHonest[i] && outputValues[i] != leaderInputValue) {
-                System.out.printf("%-" + alignmentWidth + "s %s%n", "Validity:", "\u001B[31mKO\u001B[0m An honest node has a different output value than the leader's input value.");
-                return false;
-            }
-        }
-
-        System.out.printf("%-" + alignmentWidth + "s %s%n", "Validity:", "\u001B[32mOK\u001B[0m");
+        System.out.printf("%-" + alignmentWidth + "s %s%n", "Agreement:", "\u001B[32mOK\u001B[0m " + firstHonestNodeValue);
         return true;
     }
 
