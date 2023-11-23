@@ -31,9 +31,11 @@ public class IntermediateNode extends AbstractNode {
     @Override
     protected ConsensusValue endPhase() {
         if (allMessagesHaveSameValue(messages)) {
-            return messages.get(0).value();
+            ConsensusValue receivedValue = messages.get(0).value();
+            say("Get " + receivedValue + " from all");
+            return receivedValue;
         } else {
-            say("Get " +messages.toString() + " -> Choose ⊥");
+            say("Get " + messages.toString() + " -> Choose ⊥");
         }
         return ConsensusValue.BOTTOM;
     }
