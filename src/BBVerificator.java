@@ -28,19 +28,16 @@ public class BBVerificator {
      */
     private boolean checkTermination() {
         System.out.println(Arrays.toString(areNodesHonest));
-        System.out.println(Arrays.toString(outputValues)+ "\n");
+        System.out.println(Arrays.toString(outputValues) + "\n");
         for (int i = 0; i < areNodesHonest.length; i++) {
-            if (areNodesHonest[i]) {
-                if (outputValues[i] == null) {
-                    System.out.printf("%-" + alignmentWidth + "s %s%n", "Termination:", "Honest node " + i + " has no output value.");
-                    return false;
-                }
+            if (areNodesHonest[i] && outputValues[i] == null) {
+                System.out.printf("%-" + alignmentWidth + "s %s%n", "Termination:", "\u001B[31mKO\u001B[0m Honest node " + i + " has no output value.");
+                return false;
             }
         }
         System.out.printf("%-" + alignmentWidth + "s %s%n", "Termination:", "\u001B[32mOK\u001B[0m");
         return true;
     }
-
 
     /**
      * Check if all honest nodes have the same output value.
@@ -52,7 +49,7 @@ public class BBVerificator {
                 if (firstHonestNodeValue == null) {
                     firstHonestNodeValue = outputValues[i];
                 } else if (outputValues[i] != firstHonestNodeValue) {
-                    System.out.printf("%-" + alignmentWidth + "s %s%n", "Agreement:", "Honest nodes " + i + " have different output values.");
+                    System.out.printf("%-" + alignmentWidth + "s %s%n", "Agreement:", "\u001B[31mKO\u001B[0m Honest nodes " + i + " have different output values.");
                     return false;
                 }
             }
@@ -77,25 +74,21 @@ public class BBVerificator {
 
         for (int i = 0; i < areNodesHonest.length; i++) {
             if (areNodesHonest[i] && outputValues[i] != leaderInputValue) {
-                System.out.printf("%-" + alignmentWidth + "s %s%n", "Validity:", "An honest node has a different output value than the leader's input value.");
+                System.out.printf("%-" + alignmentWidth + "s %s%n", "Validity:", "\u001B[31mKO\u001B[0m An honest node has a different output value than the leader's input value.");
                 return false;
             }
         }
 
         System.out.printf("%-" + alignmentWidth + "s %s%n", "Validity:", "\u001B[32mOK\u001B[0m");
         return true;
-
     }
 
     public boolean verifyBB() {
         boolean terminationCheck = checkTermination();
-        boolean agreementCheck = checkAgreement();
         boolean validityCheck = checkValidity();
+        boolean agreementCheck = checkAgreement();
 
         System.out.println();
         return terminationCheck && agreementCheck && validityCheck;
     }
-
-
-
 }
