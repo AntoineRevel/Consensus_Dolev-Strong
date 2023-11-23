@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SharedData {
@@ -23,6 +24,11 @@ public class SharedData {
     public synchronized ConsensusValue reedMessage(int sender, int receiver) {
         return communicationMatrix[sender][receiver];
     }
+    public synchronized void resetCommunicationMatrix() {
+        for (int i = 0; i < numberOfNodes; i++) {
+            Arrays.fill(communicationMatrix[i], null);
+        }
+    }
 
     public int getNumberOfNodes() {
         return numberOfNodes;
@@ -32,10 +38,13 @@ public class SharedData {
         return numberOfRounds;
     }
 
+    public int getCurrentRound() {
+        return currentRound.get();
+    }
+
     public int getAndIncrementRound() {
         return currentRound.getAndIncrement();
     }
-
 
     public int getLeaderId() {
         return leaderId;
@@ -49,3 +58,4 @@ public class SharedData {
         this.leaderId = leaderId;
     }
 }
+//TODO je voudrais que les methode getAndIncrementRound setLeaderId reedMessage et sendMessage soit accesible uniquemend depuis AbstractNode

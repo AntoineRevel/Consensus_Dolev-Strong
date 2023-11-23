@@ -17,7 +17,7 @@ public class ByzantineBroadcastSimulation {
     }
 
     public void startSimulation() {
-        AbstractNodeFactory factory = createFactory(protocol);
+        AbstractNodeFactory factory = getNodeFactory(protocol);
 
         for (int i = 0; i < numberOfNodes; i++) {
             INode node;
@@ -38,13 +38,13 @@ public class ByzantineBroadcastSimulation {
 
         boolean isBBProblemSolved = factory.getVerificator().verifyBB();
         if (isBBProblemSolved) {
-            System.out.println("The protocol " + protocol + " is a solution to the Byzantine Broadcast problem.");
+            System.out.println("The protocol " + protocol + " is a solution to the Byzantine Broadcast problem with this configuration.");
         } else {
-            System.out.println("The protocol " + protocol + " is NOT a solution to the Byzantine Broadcast problem.");
+            System.out.println("The protocol " + protocol + " is NOT a solution to the Byzantine Broadcast problem with this configuration.");
         }
     }
 
-    private AbstractNodeFactory createFactory(Protocols protocol) {
+    private AbstractNodeFactory getNodeFactory(Protocols protocol) {
         return switch (protocol) {
             case SIMPLE -> new SimpleNodeFactory(numberOfNodes, numberOfByzantineNodes);
             case INTERMEDIATE -> new IntermediateNodeFactory(numberOfNodes,numberOfByzantineNodes);

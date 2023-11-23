@@ -27,7 +27,7 @@ public abstract class AbstractNode implements INode {
         return sharedData.reedMessage(sender, id);
     }
 
-    private void broadcast(ConsensusValue message) {
+    protected void broadcast(ConsensusValue message) {
         for (int receiver = 0; receiver < sharedData.getNumberOfNodes(); receiver++) {
                 sendMessage(receiver, message);
         }
@@ -37,8 +37,9 @@ public abstract class AbstractNode implements INode {
      * Leader chooses an initial input value and sends it to all other nodes.
      */
     protected void startPhase() {
-        if (isLeader) { //TODO check if first imput recei from Leader ?
+        if (isLeader) {
             ConsensusValue inputValue = getDeterministicConsensusValue();
+            System.out.println(id+": Sending "+inputValue+" to all nodes");
             broadcast(inputValue);
             verificator.setLeaderInputValue(inputValue);
         }
@@ -74,7 +75,6 @@ public abstract class AbstractNode implements INode {
     public void run() {
         if (!(this instanceof IByzantineNode)) {
             verificator.setNodeHonest(id);
-            System.out.println(id + " je suis honnette");
         }
 
         startPhase();
@@ -114,5 +114,38 @@ public abstract class AbstractNode implements INode {
             }
         }
     }
+
+    protected static class Message{
+        private ConsensusValue value;
+        private int sender;
+
+        public Message(ConsensusValue value, int sender) {
+            this.value = value;
+            this.sender = sender;
+        }
+
+        public ConsensusValue getValue() {
+            return value;
+        }
+
+        public int getSender() {
+            return sender;
+        }
+    }
+
+    protected static boolean allMessagesHaveSameValue(List<Message> messages) {
+        if (messages == null || messages.isEmpty()) {
+            return false;
+        }
+
+        ConsensusValue firstValue = messages.get(0).value;
+        for (Message message : messages) {
+            if (message.value != firstValue) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
 }

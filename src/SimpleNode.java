@@ -7,11 +7,11 @@ public class SimpleNode extends AbstractNode {
 
     @Override
     protected void executeProtocol() {
-        System.out.println(Thread.currentThread().getName() + " id : " + super.id + " " + (super.isLeader ? " Leader " : ""));
+        System.out.println(id+": "+Thread.currentThread().getName() + (super.isLeader ? " I'm leader" : ""));
     }
 
     @Override
     protected ConsensusValue endPhase() {
-        return super.reedMessage(sharedData.getLeaderId());
+        return reedMessage(sharedData.getLeaderId());
     }
 }
