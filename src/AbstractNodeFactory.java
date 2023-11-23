@@ -5,8 +5,7 @@ public abstract class AbstractNodeFactory {
     protected CyclicBarrier roundBarrier;
     protected BBVerificator verificator;
 
-    public AbstractNodeFactory(int numberOfNodes, int numberOfByzantineNodes) {
-        int numberOfRounds = getNumberOfRounds();
+    public AbstractNodeFactory(int numberOfNodes, int numberOfByzantineNodes, int numberOfRounds) {
         this.sharedData = new SharedData(numberOfNodes, numberOfByzantineNodes, numberOfRounds);
         this.roundBarrier = new CyclicBarrier(numberOfNodes, this::handleRoundCompletion);
         this.verificator = new BBVerificator(numberOfNodes);
@@ -27,8 +26,8 @@ public abstract class AbstractNodeFactory {
         return verificator;
     }
 
-    protected abstract int getNumberOfRounds();
     public abstract AbstractNode createHonestNode(int id);
+
     public abstract IByzantineNode createByzantineNode(int id);
 }
 

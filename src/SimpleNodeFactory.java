@@ -1,12 +1,6 @@
 public class SimpleNodeFactory extends AbstractNodeFactory {
-
     public SimpleNodeFactory(int numberOfNodes, int numberOfByzantineNodes) {
-        super(numberOfNodes, numberOfByzantineNodes);
-    }
-
-    @Override
-    protected int getNumberOfRounds() {
-        return 1;
+        super(numberOfNodes, numberOfByzantineNodes, 1);
     }
 
     @Override

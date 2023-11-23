@@ -1,4 +1,5 @@
 public enum Protocols {
-    SIMPLE_PROTOCOL,
+    SIMPLE,
+    INTERMEDIATE,
     DOLEV_STRONG
 }

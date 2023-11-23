@@ -46,7 +46,9 @@ public class ByzantineBroadcastSimulation {
 
     private AbstractNodeFactory createFactory(Protocols protocol) {
         return switch (protocol) {
-            case SIMPLE_PROTOCOL -> new SimpleNodeFactory(numberOfNodes, numberOfByzantineNodes);
+            case SIMPLE -> new SimpleNodeFactory(numberOfNodes, numberOfByzantineNodes);
+            case INTERMEDIATE -> new IntermediateNodeFactory(numberOfNodes,numberOfByzantineNodes);
+
             default -> throw new IllegalArgumentException("Unrecognized protocol type");
         };
     }
