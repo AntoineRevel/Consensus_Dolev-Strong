@@ -6,12 +6,12 @@ public class SimpleNode extends AbstractNode {
     }
 
     @Override
-    public void executeProtocol() {
+    protected void executeProtocol() {
         System.out.println(Thread.currentThread().getName() + " id : " + super.id + " " + (super.isLeader ? " Leader " : ""));
     }
 
     @Override
-    public ConsensusValue endPhase() {
+    protected ConsensusValue endPhase() {
         return super.reedMessage(sharedData.getLeaderId());
     }
 }

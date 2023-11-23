@@ -6,17 +6,17 @@ public class ByzantineSimpleNode extends SimpleNode implements IByzantineNode {
     }
 
     @Override
-    public void startPhase() {
+    protected void startPhase() {
         super.startPhase();
     }
 
     @Override
-    public void executeProtocol() {
+    protected void executeProtocol() {
         super.executeProtocol();
     }
 
     @Override
-    public ConsensusValue endPhase() {
+    protected ConsensusValue endPhase() {
         return super.endPhase();
     }
 }

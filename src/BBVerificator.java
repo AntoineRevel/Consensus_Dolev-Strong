@@ -4,6 +4,7 @@ public class BBVerificator {
     private ConsensusValue leaderInputValue;
     private final boolean[] areNodesHonest;
     private final ConsensusValue[] outputValues;
+    private final int alignmentWidth = 10;
 
     public BBVerificator(int numberOfNodes) {
         this.areNodesHonest = new boolean[numberOfNodes];
@@ -22,21 +23,28 @@ public class BBVerificator {
         outputValues[id] = value;
     }
 
+    /**
+     * Check if all honest nodes have output values.
+     */
     private boolean checkTermination() {
         System.out.println(Arrays.toString(areNodesHonest));
-        System.out.println(Arrays.toString(outputValues));
+        System.out.println(Arrays.toString(outputValues)+ "\n");
         for (int i = 0; i < areNodesHonest.length; i++) {
             if (areNodesHonest[i]) {
                 if (outputValues[i] == null) {
-                    System.out.println("Termination property not satisfied: Honest node " + i + " has no output value.");
+                    System.out.printf("%-" + alignmentWidth + "s %s%n", "Termination:", "Honest node " + i + " has no output value.");
                     return false;
                 }
             }
         }
-        System.out.printf("Termination property satisfied: %s", "All honest nodes have output values.");//t.println(String.format("%-" + maxPrefixLength + "s %s", terminationPrefix, "All honest nodes have output values."));
+        System.out.printf("%-" + alignmentWidth + "s %s%n", "Termination:", "\u001B[32mOK\u001B[0m");
         return true;
     }
 
+
+    /**
+     * Check if all honest nodes have the same output value.
+     */
     private boolean checkAgreement() {
         ConsensusValue firstHonestNodeValue = null;
         for (int i = 0; i < areNodesHonest.length; i++) {
@@ -44,35 +52,37 @@ public class BBVerificator {
                 if (firstHonestNodeValue == null) {
                     firstHonestNodeValue = outputValues[i];
                 } else if (outputValues[i] != firstHonestNodeValue) {
-                    System.out.println("Agreement property not satisfied: Honest nodes " + i + " have different output values.");
+                    System.out.printf("%-" + alignmentWidth + "s %s%n", "Agreement:", "Honest nodes " + i + " have different output values.");
                     return false;
                 }
             }
         }
 
         if (firstHonestNodeValue == null) {
-            System.out.println("Agreement property could not be verified: No output values from honest nodes.");
+            System.out.printf("%-" + alignmentWidth + "s %s%n", "Agreement:", "\u001B[32mOK\u001B[0m No output values from honest nodes.");
             return true;
         }
-
-        System.out.println("Agreement property satisfied: All honest nodes have the same output value.");
+        System.out.printf("%-" + alignmentWidth + "s %s%n", "Agreement:", "\u001B[32mOK\u001B[0m");
         return true;
     }
 
+    /**
+     * Check if all honest nodes have the same output value as the leader's input value.
+     */
     private boolean checkValidity() {
         if (leaderInputValue == null) {
-            System.out.println("Validity property cannot be verified: Leader is not honest or leader's input value is not set.");
+            System.out.printf("%-" + alignmentWidth + "s %s%n", "Validity:", "\u001B[32mOK\u001B[0m Leader is a byzantine node.");
             return true;
         }
 
         for (int i = 0; i < areNodesHonest.length; i++) {
             if (areNodesHonest[i] && outputValues[i] != leaderInputValue) {
-                System.out.println("Validity property not satisfied: An honest node has a different output value than the leader's input value.");
+                System.out.printf("%-" + alignmentWidth + "s %s%n", "Validity:", "An honest node has a different output value than the leader's input value.");
                 return false;
             }
         }
 
-        System.out.println("Validity property satisfied: All honest nodes have the same output value as the leader's input value.");
+        System.out.printf("%-" + alignmentWidth + "s %s%n", "Validity:", "\u001B[32mOK\u001B[0m");
         return true;
 
     }

@@ -19,7 +19,7 @@ public abstract class AbstractNodeFactory {
         if (currentRound == 0) {
             System.out.println("--- Start round(s) --- ");
         } else if (currentRound == sharedData.getNumberOfRounds()) {
-            System.out.println(" --- Making final decision --- ");
+            System.out.println(" --- Final decision --- ");
         }
     }
 

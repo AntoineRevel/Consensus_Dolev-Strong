@@ -36,7 +36,7 @@ public abstract class AbstractNode implements INode {
     /**
      * Leader chooses an initial input value and sends it to all other nodes.
      */
-    public void startPhase() {
+    protected void startPhase() {
         if (isLeader) { //TODO check if first imput recei from Leader ?
             ConsensusValue inputValue = getDeterministicConsensusValue();
             broadcast(inputValue);
