@@ -7,7 +7,11 @@ public class ByzantineIntermediateNode extends IntermediateNode implements IByza
 
     @Override
     protected void startPhase() {
-        ByzantineStartPhase();
+        //byzantineStartPhase();
     }
 
+    @Override
+    protected void executeProtocol() {
+        byzantineStartPhase();
+    }
 }

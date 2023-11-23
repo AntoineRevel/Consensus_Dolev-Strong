@@ -27,8 +27,9 @@ public class BBVerificator {
      * Check if all honest nodes have output values.
      */
     private boolean checkTermination() {
-        System.out.println(Arrays.toString(areNodesHonest));
-        System.out.println(Arrays.toString(outputValues) + "\n");
+        //System.out.println(Arrays.toString(areNodesHonest));
+        //System.out.println(Arrays.toString(outputValues) + "\n");
+        System.out.println();
         for (int i = 0; i < areNodesHonest.length; i++) {
             if (areNodesHonest[i] && outputValues[i] == null) {
                 System.out.printf("%-" + alignmentWidth + "s %s%n", "Termination:", "\u001B[31mKO\u001B[0m Honest node " + i + " has no output value.");

@@ -17,13 +17,13 @@ public class IntermediateNode extends AbstractNode {
             int leaderId = sharedData.getLeaderId();
             ConsensusValue leaderValue = reedMessage(leaderId);
             if (leaderValue != null) {
-                System.out.println(id + ": Received " + leaderValue + " from the leader, sending it to all");
+                say("Received " + leaderValue + " from the leader, sending it to all");
                 messages.add(new Message(leaderValue, leaderId));
                 broadcast(leaderValue);
             }
         } else if (currentRound == 2) {
             List<Message> receivedMessages = getAllReceivedMessages();
-            System.out.println(id + ": Received" + receivedMessages);
+            say("Received" + receivedMessages);
             messages.addAll(receivedMessages);
         }
     }
@@ -31,7 +31,9 @@ public class IntermediateNode extends AbstractNode {
     @Override
     protected ConsensusValue endPhase() {
         if (allMessagesHaveSameValue(messages)) {
-            return messages.get(0).getValue();
+            return messages.get(0).value();
+        } else {
+            say("Get " +messages.toString() + " -> Choose ⊥");
         }
         return ConsensusValue.BOTTOM;
     }

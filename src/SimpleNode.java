@@ -7,7 +7,7 @@ public class SimpleNode extends AbstractNode {
 
     @Override
     protected void executeProtocol() {
-        System.out.println(id+": "+Thread.currentThread().getName() + (super.isLeader ? " I'm leader" : ""));
+        say(Thread.currentThread().getName() + (super.isLeader ? " I'm leader" : ""));
     }
 
     @Override
