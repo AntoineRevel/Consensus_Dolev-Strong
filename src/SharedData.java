@@ -21,8 +21,9 @@ public class SharedData {
         communicationMatrix[sender][receiver] = message;
     }
 
-    public synchronized ConsensusValue reedMessage(int sender, int receiver) {
+    public synchronized ConsensusValue readMessage(int sender, int receiver) {
         return communicationMatrix[sender][receiver];
+
     }
     public synchronized void resetCommunicationMatrix() {
         for (int i = 0; i < numberOfNodes; i++) {

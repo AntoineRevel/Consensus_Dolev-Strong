@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -17,6 +18,7 @@ public abstract class AbstractNode implements INode {
         this.sharedData = sharedData;
         this.roundBarrier = roundBarrier;
         this.verificator = verificator;
+        //TODO add nbofNodes
     }
 
     protected void sendMessage(int receiver, ConsensusValue message) {
@@ -24,7 +26,7 @@ public abstract class AbstractNode implements INode {
     }
 
     protected ConsensusValue reedMessage(int sender) {
-        return sharedData.reedMessage(sender, id);
+        return sharedData.readMessage(sender, id);
     }
 
     protected void broadcast(ConsensusValue message) {
@@ -32,6 +34,19 @@ public abstract class AbstractNode implements INode {
                 sendMessage(receiver, message);
         }
     }
+
+    protected List<Message> getAllReceivedMessages() {
+        List<Message> receivedMessages = new ArrayList<>();
+        for (int sender = 0; sender < sharedData.getNumberOfNodes(); sender++) {
+                ConsensusValue messageValue = reedMessage(sender);
+                if (messageValue != null) {
+                    receivedMessages.add(new Message(messageValue, sender));
+            }
+        }
+        return receivedMessages;
+    }
+
+
 
     /**
      * Leader chooses an initial input value and sends it to all other nodes.
@@ -130,6 +145,10 @@ public abstract class AbstractNode implements INode {
 
         public int getSender() {
             return sender;
+        }
+        @Override
+        public String toString() {
+            return value + " from " + sender;
         }
     }
 

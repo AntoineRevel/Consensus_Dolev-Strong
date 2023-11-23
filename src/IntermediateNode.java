@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CyclicBarrier;
 
@@ -6,6 +7,7 @@ public class IntermediateNode extends AbstractNode {
 
     public IntermediateNode(int id, SharedData sharedData, CyclicBarrier roundBarrier, BBVerificator verificator) {
         super(id, sharedData, roundBarrier, verificator);
+        this.messages = new ArrayList<>();
     }
 
     @Override
@@ -15,12 +17,12 @@ public class IntermediateNode extends AbstractNode {
             int leaderId = sharedData.getLeaderId();
             ConsensusValue leaderValue = reedMessage(leaderId);
             if (leaderValue != null) {
+                System.out.println(id+": Received "+ leaderValue+ " from the leader, sending it to all");
                 messages.add(new Message(leaderValue, leaderId));
                 broadcast(leaderValue);
             }
         } else if (currentRound == 2) {
-
-
+            messages.addAll(getAllReceivedMessages());
         }
     }
 
