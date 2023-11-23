@@ -36,7 +36,12 @@ public class ByzantineBroadcastSimulation {
             Thread.currentThread().interrupt();
         }
 
-        factory.getVerificator().verifyBB();
+        boolean isBBProblemSolved = factory.getVerificator().verifyBB();
+        if (isBBProblemSolved) {
+            System.out.println("The protocol " + protocol + " is a solution to the Byzantine Broadcast problem.");
+        } else {
+            System.out.println("The protocol " + protocol + " is NOT a solution to the Byzantine Broadcast problem.");
+        }
     }
 
     private AbstractNodeFactory createFactory(Protocols protocol) {
