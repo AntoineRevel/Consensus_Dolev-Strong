@@ -7,21 +7,22 @@ public class SharedData {
     private int leaderId = 0;
     protected final int numberOfRounds;
     private final AtomicInteger currentRound = new AtomicInteger(0);
-    private final ConsensusValue[][] communicationMatrix;
+    private final Message[][] communicationMatrix;
 
 
     public SharedData(int numberOfNodes, int numberOfByzantineNodes, int numberOfRounds) {
         this.numberOfNodes = numberOfNodes;
         this.numberOfByzantineNodes = numberOfByzantineNodes;
         this.numberOfRounds = numberOfRounds;
-        communicationMatrix = new ConsensusValue[numberOfNodes][numberOfNodes];
+        communicationMatrix = new Message[numberOfNodes][numberOfNodes];
     }
 
-    public synchronized void sendMessage(int sender, int receiver, ConsensusValue message) {
+
+    public synchronized void sendMessage(int sender, int receiver, Message message) {
         communicationMatrix[sender][receiver] = message;
     }
 
-    public synchronized ConsensusValue readMessage(int sender, int receiver) {
+    public synchronized Message readMessage(int sender, int receiver) {
         return communicationMatrix[sender][receiver];
 
     }
@@ -60,7 +61,7 @@ public class SharedData {
     }
 
     public void print(){
-        for (ConsensusValue[] row : communicationMatrix)
+        for (Message[] row : communicationMatrix)
             System.out.println(Arrays.toString(row));
     }
 }

@@ -26,15 +26,19 @@ public abstract class AbstractNode implements INode {
         System.out.println(id + ": " + message);
     }
 
-    protected void sendMessage(int receiver, ConsensusValue message) {
-        sharedData.sendMessage(id, receiver, message);
+    protected void sendMessage(int receiver, Message message) {
+        sharedData.sendMessage(id, receiver, sign(message));
     }
 
-    protected ConsensusValue reedMessage(int sender) {
+    protected Message reedMessage(int sender) {
         return sharedData.readMessage(sender, id);
     }
 
-    protected void broadcast(ConsensusValue message) {
+    protected Message sign(Message message){
+        return message.addSigner(id);
+    }
+
+    protected void broadcast(Message message) {
         for (int receiver = 0; receiver < numberOfNodes; receiver++) {
             sendMessage(receiver, message);
         }
@@ -43,9 +47,9 @@ public abstract class AbstractNode implements INode {
     protected List<Message> getAllReceivedMessages() {
         List<Message> receivedMessages = new ArrayList<>();
         for (int sender = 0; sender < numberOfNodes; sender++) {
-            ConsensusValue messageValue = reedMessage(sender);
-            if (messageValue != null) {
-                receivedMessages.add(new Message(messageValue, sender));
+            Message message = reedMessage(sender);
+            if (message != null) {
+                receivedMessages.add(message);
             }
         }
         return receivedMessages;
@@ -58,8 +62,9 @@ public abstract class AbstractNode implements INode {
     protected void startPhase() {
         if (isLeader) {
             ConsensusValue inputValue = getDeterministicConsensusValue();
+            Message message = Message.getNewMessage(inputValue);
             System.out.println(id + ": Sending " + inputValue + " to all nodes");
-            broadcast(inputValue);
+            broadcast(message);
             verifier.setLeaderInputValue(inputValue);
         }
     }
@@ -129,7 +134,7 @@ public abstract class AbstractNode implements INode {
             for (int i = 0; i < numberOfNodes; i++) {
                 if (i % (allValues.length + 1) != 0) {
                     ConsensusValue valueToSend = allValues[i % allValues.length];
-                    sendMessage(i, valueToSend);
+                    sendMessage(i, Message.getNewMessage(valueToSend));
                     say("Sending " + valueToSend + " to " + i);
                 } else {
                     say("Not sending any message to " + i);
@@ -139,21 +144,14 @@ public abstract class AbstractNode implements INode {
         }
     }
 
-    protected record Message(ConsensusValue value, int sender) {
-        @Override
-        public String toString() {
-            return value + " from " + sender;
-        }
-    }
-
     protected static boolean allMessagesHaveSameValue(List<Message> messages) {
         if (messages == null || messages.isEmpty()) {
             return false;
         }
 
-        ConsensusValue firstValue = messages.get(0).value;
+        ConsensusValue firstValue = messages.get(0).getValue();
         for (Message message : messages) {
-            if (message.value != firstValue) {
+            if (message.getValue() != firstValue) {
                 return false;
             }
         }

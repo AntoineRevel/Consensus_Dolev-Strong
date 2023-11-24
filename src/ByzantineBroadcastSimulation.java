@@ -48,6 +48,7 @@ public class ByzantineBroadcastSimulation {
         return switch (protocol) {
             case SIMPLE -> new SimpleNodeFactory(numberOfNodes, numberOfByzantineNodes);
             case INTERMEDIATE -> new IntermediateNodeFactory(numberOfNodes,numberOfByzantineNodes);
+            case DOLEV_STRONG -> new DolevStrongNodeFactory(numberOfNodes, numberOfByzantineNodes);
 
             default -> throw new IllegalArgumentException("Unrecognized protocol type");
         };
