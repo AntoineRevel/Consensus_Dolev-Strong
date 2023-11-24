@@ -1,8 +1,8 @@
 import java.util.concurrent.CyclicBarrier;
 
 public class SimpleNode extends AbstractNode {
-    public SimpleNode(int id, SharedData sharedData, CyclicBarrier roundBarrier, BBVerificator verificator) {
-        super(id, sharedData, roundBarrier, verificator);
+    public SimpleNode(int id, SharedData sharedData, CyclicBarrier roundBarrier, BBVerifier verifier) {
+        super(id, sharedData, roundBarrier, verifier);
     }
 
     @Override

@@ -1,8 +1,8 @@
 import java.util.concurrent.CyclicBarrier;
 
 public class ByzantineSimpleNode extends SimpleNode implements IByzantineNode {
-    public ByzantineSimpleNode(int id, SharedData sharedData, CyclicBarrier roundBarrier, BBVerificator verificator) {
-        super(id, sharedData, roundBarrier, verificator);
+    public ByzantineSimpleNode(int id, SharedData sharedData, CyclicBarrier roundBarrier, BBVerifier verifier) {
+        super(id, sharedData, roundBarrier, verifier);
     }
 
     @Override

@@ -36,7 +36,7 @@ public class ByzantineBroadcastSimulation {
             Thread.currentThread().interrupt();
         }
 
-        boolean isBBProblemSolved = factory.getVerificator().verifyBB();
+        boolean isBBProblemSolved = factory.getVerifier().verifyBB();
         if (isBBProblemSolved) {
             System.out.println("The protocol " + protocol + " is a solution to the Byzantine Broadcast problem with this configuration.");
         } else {

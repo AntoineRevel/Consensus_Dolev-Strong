@@ -5,8 +5,8 @@ import java.util.concurrent.CyclicBarrier;
 public class IntermediateNode extends AbstractNode {
     private final List<Message> messages; //TODO choix de type de collection
 
-    public IntermediateNode(int id, SharedData sharedData, CyclicBarrier roundBarrier, BBVerificator verificator) {
-        super(id, sharedData, roundBarrier, verificator);
+    public IntermediateNode(int id, SharedData sharedData, CyclicBarrier roundBarrier, BBVerifier verifier) {
+        super(id, sharedData, roundBarrier, verifier);
         this.messages = new ArrayList<>();
     }
 

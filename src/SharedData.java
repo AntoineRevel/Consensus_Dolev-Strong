@@ -58,5 +58,10 @@ public class SharedData {
     public void setLeaderId(int leaderId) {
         this.leaderId = leaderId;
     }
+
+    public void print(){
+        for (ConsensusValue[] row : communicationMatrix)
+            System.out.println(Arrays.toString(row));
+    }
 }
 //TODO je voudrais que les methode getAndIncrementRound setLeaderId reedMessage et sendMessage soit accesible uniquemend depuis AbstractNode

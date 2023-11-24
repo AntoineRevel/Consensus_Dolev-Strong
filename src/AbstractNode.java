@@ -10,19 +10,20 @@ public abstract class AbstractNode implements INode {
     protected final boolean isLeader;
     protected final SharedData sharedData;
     private final CyclicBarrier roundBarrier;
-    protected final BBVerificator verificator;
+    protected final BBVerifier verifier;
+    private final int numberOfNodes;
 
-    public AbstractNode(int id, SharedData sharedData, CyclicBarrier roundBarrier, BBVerificator verificator) {
+    public AbstractNode(int id, SharedData sharedData, CyclicBarrier roundBarrier, BBVerifier verifier) {
         this.id = id;
         this.isLeader = sharedData.getLeaderId() == id;
         this.sharedData = sharedData;
         this.roundBarrier = roundBarrier;
-        this.verificator = verificator;
-        //TODO add nbofNodes
+        this.verifier = verifier;
+        this.numberOfNodes = sharedData.getNumberOfNodes();
     }
 
     protected void say(String message) {
-        System.out.println(id + ": " +message);
+        System.out.println(id + ": " + message);
     }
 
     protected void sendMessage(int receiver, ConsensusValue message) {
@@ -34,14 +35,14 @@ public abstract class AbstractNode implements INode {
     }
 
     protected void broadcast(ConsensusValue message) {
-        for (int receiver = 0; receiver < sharedData.getNumberOfNodes(); receiver++) {
+        for (int receiver = 0; receiver < numberOfNodes; receiver++) {
             sendMessage(receiver, message);
         }
     }
 
     protected List<Message> getAllReceivedMessages() {
         List<Message> receivedMessages = new ArrayList<>();
-        for (int sender = 0; sender < sharedData.getNumberOfNodes(); sender++) {
+        for (int sender = 0; sender < numberOfNodes; sender++) {
             ConsensusValue messageValue = reedMessage(sender);
             if (messageValue != null) {
                 receivedMessages.add(new Message(messageValue, sender));
@@ -59,7 +60,7 @@ public abstract class AbstractNode implements INode {
             ConsensusValue inputValue = getDeterministicConsensusValue();
             System.out.println(id + ": Sending " + inputValue + " to all nodes");
             broadcast(inputValue);
-            verificator.setLeaderInputValue(inputValue);
+            verifier.setLeaderInputValue(inputValue);
         }
     }
 
@@ -77,7 +78,7 @@ public abstract class AbstractNode implements INode {
     }
 
     private int calculateConfigurationHash() {
-        return Objects.hash(sharedData.getNumberOfNodes(), sharedData.getNumberOfByzantineNodes(), sharedData.getNumberOfRounds());
+        return Objects.hash(numberOfNodes, sharedData.getNumberOfByzantineNodes(), sharedData.getNumberOfRounds());
     }
 
     private void waitForOthers() {
@@ -92,7 +93,7 @@ public abstract class AbstractNode implements INode {
     @Override
     public void run() {
         if (!(this instanceof IByzantineNode)) {
-            verificator.setNodeHonest(id);
+            verifier.setNodeHonest(id);
         }
 
         startPhase();
@@ -104,8 +105,9 @@ public abstract class AbstractNode implements INode {
             waitForOthers();
         }
 
+
         ConsensusValue outputValue = endPhase();
-        verificator.setOutputValue(id, outputValue);
+        verifier.setOutputValue(id, outputValue);
     }
 
     /**
@@ -124,12 +126,15 @@ public abstract class AbstractNode implements INode {
     protected void byzantineStartPhase() {
         if (isLeader) {
             ConsensusValue[] allValues = ConsensusValue.values();
-            int numberOfNodes = sharedData.getNumberOfNodes();
-
             for (int i = 0; i < numberOfNodes; i++) {
-                ConsensusValue valueToSend = allValues[i % allValues.length];
-                sendMessage(i, valueToSend);
-                say("Sending " + valueToSend + " to " + i);
+                if (i % (allValues.length + 1) != 0) {
+                    ConsensusValue valueToSend = allValues[i % allValues.length];
+                    sendMessage(i, valueToSend);
+                    say("Sending " + valueToSend + " to " + i);
+                } else {
+                    say("Not sending any message to " + i);
+                }
+
             }
         }
     }

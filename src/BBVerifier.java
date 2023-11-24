@@ -1,12 +1,10 @@
-import java.util.Arrays;
-
-public class BBVerificator {
+public class BBVerifier {
     private ConsensusValue leaderInputValue;
     private final boolean[] areNodesHonest;
     private final ConsensusValue[] outputValues;
     private final int alignmentWidth = 13;
 
-    public BBVerificator(int numberOfNodes) {
+    public BBVerifier(int numberOfNodes) {
         this.areNodesHonest = new boolean[numberOfNodes];
         this.outputValues = new ConsensusValue[numberOfNodes];
     }
