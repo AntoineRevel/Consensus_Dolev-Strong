@@ -15,13 +15,13 @@ public class Message {
         this.signers[this.signers.length - 1] = newSignerId;
     }
 
-    public static Message getNewMessage(ConsensusValue value){
+    public static Message getNewMessage(ConsensusValue value) { //TODO synchronized ?
         int[] signers = new int[0];
-        return new Message(value,signers);
+        return new Message(value, signers);
     }
 
-    public Message addSigner(int id){
-        return new Message(this,id);
+    public Message addSigner(int id) {
+        return new Message(this, id);
     }
 
     @Override
@@ -31,5 +31,5 @@ public class Message {
 
     public ConsensusValue getValue() {
         return value;
-    }
+    } //TODO synchronized ?
 }

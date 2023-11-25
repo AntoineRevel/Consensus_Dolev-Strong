@@ -18,13 +18,16 @@ public class IntermediateNode extends AbstractNode {
             Message leaderMessage = reedMessage(leaderId);
             ConsensusValue leaderValue = leaderMessage.getValue();
             if (leaderValue != null) {
-                say("Received " + leaderValue + " from the leader, sending it to all");
                 messages.add(leaderMessage);
-                broadcast(leaderMessage);
+
+                if (isLeader) broadcast(Message.getNewMessage(leaderValue));
+                else broadcast(leaderMessage);
+
+                say("Received " + leaderValue + " from the leader, sending it to all");
             }
         } else if (currentRound == 2) {
             List<Message> receivedMessages = getAllReceivedMessages();
-            say("Received" + receivedMessages);
+            say("Received " + receivedMessages);
             messages.addAll(receivedMessages);
         }
     }

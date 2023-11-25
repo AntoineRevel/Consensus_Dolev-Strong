@@ -34,7 +34,7 @@ public abstract class AbstractNode implements INode {
         return sharedData.readMessage(sender, id);
     }
 
-    protected Message sign(Message message){
+    protected Message sign(Message message) {
         return message.addSigner(id);
     }
 
@@ -65,7 +65,22 @@ public abstract class AbstractNode implements INode {
             Message message = Message.getNewMessage(inputValue);
             System.out.println(id + ": Sending " + inputValue + " to all nodes");
             broadcast(message);
-            verifier.setLeaderInputValue(inputValue);
+            if (!(this instanceof IByzantineNode)) verifier.setLeaderInputValue(inputValue);
+        }
+    }
+
+    protected void byzantineStartPhase() {
+        if (isLeader) {
+            ConsensusValue[] allValues = ConsensusValue.values();
+            for (int i = 0; i < numberOfNodes; i++) {
+                if (i % (allValues.length + 1) != 0) {
+                    ConsensusValue valueToSend = allValues[i % allValues.length];
+                    sendMessage(i, Message.getNewMessage(valueToSend));
+                    say("Sending " + valueToSend + " to " + i);
+                } else {
+                    say("Not sending any message to " + i);
+                }
+            }
         }
     }
 
@@ -83,7 +98,7 @@ public abstract class AbstractNode implements INode {
     }
 
     private int calculateConfigurationHash() {
-        return Objects.hash(numberOfNodes, sharedData.getNumberOfByzantineNodes(), sharedData.getNumberOfRounds());
+        return Objects.hash(numberOfNodes, sharedData.getNumberOfByzantineNodes());
     }
 
     private void waitForOthers() {
@@ -128,34 +143,31 @@ public abstract class AbstractNode implements INode {
     protected abstract ConsensusValue endPhase();
 
 
-    protected void byzantineStartPhase() {
-        if (isLeader) {
-            ConsensusValue[] allValues = ConsensusValue.values();
-            for (int i = 0; i < numberOfNodes; i++) {
-                if (i % (allValues.length + 1) != 0) {
-                    ConsensusValue valueToSend = allValues[i % allValues.length];
-                    sendMessage(i, Message.getNewMessage(valueToSend));
-                    say("Sending " + valueToSend + " to " + i);
-                } else {
-                    say("Not sending any message to " + i);
-                }
-
-            }
-        }
-    }
-
     protected static boolean allMessagesHaveSameValue(List<Message> messages) {
         if (messages == null || messages.isEmpty()) {
             return false;
         }
 
         ConsensusValue firstValue = messages.get(0).getValue();
+        if (firstValue == null) return false;
         for (Message message : messages) {
             if (message.getValue() != firstValue) {
                 return false;
             }
         }
         return true;
+    }
+
+    protected static List<ConsensusValue> getConsensusValuesFromMessages(List<Message> messages) {
+        List<ConsensusValue> consensusValues = new ArrayList<>();
+        if (messages != null) {
+            for (Message message : messages) {
+                if (message.getValue() != null) {
+                    consensusValues.add(message.getValue());
+                }
+            }
+        }
+        return consensusValues;
     }
 
 

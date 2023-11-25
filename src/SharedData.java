@@ -15,10 +15,13 @@ public class SharedData {
         this.numberOfByzantineNodes = numberOfByzantineNodes;
         this.numberOfRounds = numberOfRounds;
         communicationMatrix = new Message[numberOfNodes][numberOfNodes];
+        for (int i = 0; i < numberOfNodes; i++) {
+            Arrays.fill(communicationMatrix[i], Message.getNewMessage(null));
+        }
     }
 
 
-    public synchronized void sendMessage(int sender, int receiver, Message message) {
+    public synchronized void sendMessage(int sender, int receiver, Message message) { // TODO qand utiliser synchronized
         communicationMatrix[sender][receiver] = message;
     }
 
@@ -26,6 +29,7 @@ public class SharedData {
         return communicationMatrix[sender][receiver];
 
     }
+
     public synchronized void resetCommunicationMatrix() {
         for (int i = 0; i < numberOfNodes; i++) {
             Arrays.fill(communicationMatrix[i], null);
@@ -60,7 +64,7 @@ public class SharedData {
         this.leaderId = leaderId;
     }
 
-    public void print(){
+    public void print() {
         for (Message[] row : communicationMatrix)
             System.out.println(Arrays.toString(row));
     }

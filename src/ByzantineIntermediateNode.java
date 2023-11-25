@@ -8,11 +8,12 @@ public class ByzantineIntermediateNode extends IntermediateNode implements IByza
     @Override
     protected void startPhase() {
         //byzantineStartPhase();
+        super.startPhase();
     }
 
     @Override
     protected void executeProtocol() {
         if (sharedData.getCurrentRound() == 1) byzantineStartPhase();
-        super.executeProtocol();
+        //super.executeProtocol();
     }
 }
