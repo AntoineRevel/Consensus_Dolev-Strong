@@ -32,4 +32,8 @@ public class Message {
     public ConsensusValue getValue() {
         return value;
     } //TODO synchronized ?
+
+    public int[] getSigners() {
+        return signers;
+    }
 }
