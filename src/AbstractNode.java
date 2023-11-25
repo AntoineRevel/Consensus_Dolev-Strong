@@ -48,7 +48,7 @@ public abstract class AbstractNode implements INode {
         List<Message> receivedMessages = new ArrayList<>();
         for (int sender = 0; sender < numberOfNodes; sender++) {
             Message message = reedMessage(sender);
-            if (message != null) {
+            if (message.getValue() != null) {
                 receivedMessages.add(message);
             }
         }

@@ -8,7 +8,7 @@ public class ByzantineIntermediateNode extends IntermediateNode implements IByza
     @Override
     protected void startPhase() {
         //byzantineStartPhase();
-        super.startPhase();
+        //super.startPhase();
     }
 
     @Override

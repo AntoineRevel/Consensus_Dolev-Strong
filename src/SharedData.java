@@ -27,7 +27,6 @@ public class SharedData {
 
     public synchronized Message readMessage(int sender, int receiver) {
         return communicationMatrix[sender][receiver];
-
     }
 
     public synchronized void resetCommunicationMatrix() {

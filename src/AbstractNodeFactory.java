@@ -13,8 +13,8 @@ public abstract class AbstractNodeFactory {
 
     private void handleRoundCompletion() {
         int currentRound = sharedData.getAndIncrementRound();
-        System.out.println();
-        sharedData.print();
+        //System.out.println();
+        //sharedData.print();
         System.out.println("--- End of round " + currentRound + " --- \n");
 
         if (currentRound == 0) {

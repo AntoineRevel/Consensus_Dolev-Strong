@@ -12,6 +12,8 @@ public class SimpleNode extends AbstractNode {
 
     @Override
     protected ConsensusValue endPhase() {
-        return reedMessage(sharedData.getLeaderId()).getValue();
+        ConsensusValue receivedValue = reedMessage(sharedData.getLeaderId()).getValue();
+        say("Get " + receivedValue);
+        return receivedValue;
     }
 }
