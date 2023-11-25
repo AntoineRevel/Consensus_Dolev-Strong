@@ -4,10 +4,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SharedData {
     private final int numberOfNodes;
     private final int numberOfByzantineNodes;
-    private int leaderId = 0;
     protected final int numberOfRounds;
     private final AtomicInteger currentRound = new AtomicInteger(0);
-    private final Message[][] communicationMatrix;
+    private Message[][] communicationMatrix;
+    private Message[][] nextCommunicationMatrix;
 
 
     public SharedData(int numberOfNodes, int numberOfByzantineNodes, int numberOfRounds) {
@@ -18,21 +18,19 @@ public class SharedData {
         for (int i = 0; i < numberOfNodes; i++) {
             Arrays.fill(communicationMatrix[i], Message.getNewMessage(null));
         }
+        nextCommunicationMatrix = new Message[numberOfNodes][numberOfNodes];
+        for (int i = 0; i < numberOfNodes; i++) {
+            Arrays.fill(nextCommunicationMatrix[i], Message.getNewMessage(null));
+        }
     }
 
 
     public synchronized void sendMessage(int sender, int receiver, Message message) { // TODO qand utiliser synchronized
-        communicationMatrix[sender][receiver] = message;
+        nextCommunicationMatrix[sender][receiver] = message;
     }
 
     public synchronized Message readMessage(int sender, int receiver) {
         return communicationMatrix[sender][receiver];
-    }
-
-    public synchronized void resetCommunicationMatrix() {
-        for (int i = 0; i < numberOfNodes; i++) {
-            Arrays.fill(communicationMatrix[i], null);
-        }
     }
 
     public int getNumberOfNodes() {
@@ -48,20 +46,22 @@ public class SharedData {
     }
 
     public int getAndIncrementRound() {
+        communicationMatrix=nextCommunicationMatrix;
+        nextCommunicationMatrix = new Message[numberOfNodes][numberOfNodes];
+        for (int i = 0; i < numberOfNodes; i++) {
+            Arrays.fill(nextCommunicationMatrix[i], Message.getNewMessage(null));
+        }
         return currentRound.getAndIncrement();
     }
 
     public int getLeaderId() {
-        return leaderId;
+        return 0;
     }
 
     public int getNumberOfByzantineNodes() {
         return numberOfByzantineNodes;
     }
 
-    public void setLeaderId(int leaderId) {
-        this.leaderId = leaderId;
-    }
 
     public void print() {
         for (Message[] row : communicationMatrix)

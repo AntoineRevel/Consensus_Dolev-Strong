@@ -10,6 +10,6 @@ public class DolevStrongNodeFactory extends AbstractNodeFactory {
 
     @Override
     public IByzantineNode createByzantineNode(int id) {
-        return null;
+        return new ByzantineDolevStrongNode(id,sharedData,roundBarrier,verifier);
     }
 }
