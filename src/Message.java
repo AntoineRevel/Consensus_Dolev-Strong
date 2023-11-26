@@ -15,7 +15,7 @@ public class Message {
         this.signers[this.signers.length - 1] = newSignerId;
     }
 
-    public static Message getNewMessage(ConsensusValue value) { //TODO synchronized ?
+    public static Message getNewMessage(ConsensusValue value) {
         int[] signers = new int[0];
         return new Message(value, signers);
     }
@@ -31,7 +31,7 @@ public class Message {
 
     public ConsensusValue getValue() {
         return value;
-    } //TODO synchronized ?
+    }
 
     public int[] getSigners() {
         return signers;

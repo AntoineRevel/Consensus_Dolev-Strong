@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
@@ -58,18 +55,21 @@ public abstract class AbstractNode implements INode {
 
     /**
      * Leader chooses an initial input value and sends it to all other nodes.
+     *
+     * @return
      */
-    protected void startPhase() {
+    protected ConsensusValue startPhase() {
         if (isLeader) {
             ConsensusValue inputValue = getDeterministicConsensusValue();
             Message message = Message.getNewMessage(inputValue);
             System.out.println(id + ": Sending " + inputValue + " to all nodes");
             broadcast(message);
-            if (!(this instanceof IByzantineNode)) verifier.setLeaderInputValue(inputValue);
+            return inputValue;
         }
+        return null;
     }
 
-    protected void byzantineStartPhase() {
+    protected void byzantine1StartPhase() {
         if (isLeader) {
             ConsensusValue[] allValues = ConsensusValue.values();
             for (int i = 0; i < numberOfNodes; i++) {
@@ -79,6 +79,25 @@ public abstract class AbstractNode implements INode {
                     say("Sending " + valueToSend + " to " + i);
                 } else {
                     say("Not sending any message to " + i);
+                }
+            }
+        }
+    }
+
+    protected void byzantineStartPhase() {
+        if (isLeader) {
+            ConsensusValue[] allValues = ConsensusValue.values();
+            ConsensusValue commonValueToSend = ConsensusValue.V;
+            int excludedNodeId = numberOfNodes - 1;
+
+            for (int i = 0; i < numberOfNodes; i++) {
+                if (i > excludedNodeId/2) {
+                    sendMessage(i, Message.getNewMessage(commonValueToSend));
+                    say("Sending " + commonValueToSend + " to " + i);
+                } else {
+                    ConsensusValue wrongValue = ConsensusValue.R;
+                    sendMessage(i, Message.getNewMessage(wrongValue));
+                    say("Sending " + wrongValue + " to " + i);
                 }
             }
         }
@@ -112,11 +131,10 @@ public abstract class AbstractNode implements INode {
 
     @Override
     public void run() {
-        if (!(this instanceof IByzantineNode)) {
-            verifier.setNodeHonest(id);
-        }
+        if (!(this instanceof IByzantineNode)) verifier.setNodeHonest(id);
 
-        startPhase();
+        ConsensusValue leaderInputValue = startPhase();
+        if (!(this instanceof IByzantineNode)) verifier.setLeaderInputValue(leaderInputValue);
         waitForOthers();
 
         int numberOfRounds = sharedData.getNumberOfRounds();

@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.concurrent.CyclicBarrier;
 
 public class ByzantineDolevStrongNode extends DolevStrongNode implements IByzantineNode{
@@ -6,12 +7,21 @@ public class ByzantineDolevStrongNode extends DolevStrongNode implements IByzant
     }
 
     @Override
-    protected void startPhase() {
+    protected ConsensusValue startPhase() {
         byzantineStartPhase();
+        return null;
     }
 
     @Override
     protected void executeProtocol() {
-        if (sharedData.getCurrentRound() == 1) byzantineStartPhase();
+        List<Message> receivedMessage = getAllReceivedMessages();
+        for (Message message : receivedMessage) {
+            if (containsKDistinct(message.getSigners())) {
+                values.add(message.getValue());
+                say(message.toString());
+                if (message.getValue()==ConsensusValue.R)broadcast(message);
+            }
+        }
+
     }
 }

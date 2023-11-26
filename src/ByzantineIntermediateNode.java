@@ -6,9 +6,10 @@ public class ByzantineIntermediateNode extends IntermediateNode implements IByza
     }
 
     @Override
-    protected void startPhase() {
+    protected ConsensusValue startPhase() {
         //byzantineStartPhase();
         //super.startPhase();
+        return null;
     }
 
     @Override

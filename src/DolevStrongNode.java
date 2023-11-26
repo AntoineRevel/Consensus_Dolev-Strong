@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.concurrent.CyclicBarrier;
 
 public class DolevStrongNode extends AbstractNode {
-    private final List<ConsensusValue> values;
+    protected final List<ConsensusValue> values;
 
     public DolevStrongNode(int id, SharedData sharedData, CyclicBarrier roundBarrier, BBVerifier verifier) {
         super(id, sharedData, roundBarrier, verifier);
@@ -11,24 +11,32 @@ public class DolevStrongNode extends AbstractNode {
     }
 
     @Override
+    protected ConsensusValue startPhase() {
+        ConsensusValue consensusValue = super.startPhase();
+        if (isLeader)values.add(consensusValue);
+        return consensusValue;
+    }
+
+    @Override
     protected void executeProtocol() {
         List<Message> receivedMessage = getAllReceivedMessages();
         for (Message message : receivedMessage) {
-            if (containsKDistinct(message.getSigners())) { //todo value for the first time
+            if (containsKDistinct(message.getSigners())) {
                 values.add(message.getValue());
-                say(message.toString());
+                say("Get " + message);
                 broadcast(message);
             }
         }
 
     }
 
-    private boolean containsKDistinct(int[] array) {
+    protected boolean containsKDistinct(int[] signers) {
         int distinctCount = 0;
-        for (int i = 0; i < array.length; i++) {
+        for (int i = 0; i < signers.length; i++) {
             boolean isDistinct = true;
-            for (int j = 0; j < array.length; j++) {
-                if (i != j && array[i] == array[j]) {
+            if (signers[i] == id) return false;
+            for (int j = 0; j < signers.length; j++) {
+                if (i != j && signers[i] == signers[j]) {
                     isDistinct = false;
                     break;
                 }

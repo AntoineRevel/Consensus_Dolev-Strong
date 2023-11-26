@@ -25,7 +25,7 @@ public class SharedData {
     }
 
 
-    public synchronized void sendMessage(int sender, int receiver, Message message) { // TODO qand utiliser synchronized
+    public synchronized void sendMessage(int sender, int receiver, Message message) {
         nextCommunicationMatrix[sender][receiver] = message;
     }
 
@@ -55,7 +55,7 @@ public class SharedData {
     }
 
     public int getLeaderId() {
-        return 0;
+        return numberOfNodes-1;
     }
 
     public int getNumberOfByzantineNodes() {
@@ -68,4 +68,3 @@ public class SharedData {
             System.out.println(Arrays.toString(row));
     }
 }
-//TODO je voudrais que les methode getAndIncrementRound setLeaderId reedMessage et sendMessage soit accesible uniquemend depuis AbstractNode
