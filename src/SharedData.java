@@ -46,7 +46,7 @@ public class SharedData {
     }
 
     public int getAndIncrementRound() {
-        communicationMatrix=nextCommunicationMatrix;
+        communicationMatrix = nextCommunicationMatrix;
         nextCommunicationMatrix = new Message[numberOfNodes][numberOfNodes];
         for (int i = 0; i < numberOfNodes; i++) {
             Arrays.fill(nextCommunicationMatrix[i], Message.getNewMessage(null));
@@ -55,13 +55,12 @@ public class SharedData {
     }
 
     public int getLeaderId() {
-        return numberOfNodes-1;
+        return 0;
     }
 
     public int getNumberOfByzantineNodes() {
         return numberOfByzantineNodes;
     }
-
 
     public void print() {
         for (Message[] row : communicationMatrix)

@@ -1,7 +1,7 @@
 public class Main {
     public static void main(String[] args) {
-        int numberOfNodes = 11;
-        int numberOfByzantineNodes = 5;
+        int numberOfNodes = 5;
+        int numberOfByzantineNodes = 1;
         Protocols protocol = Protocols.DOLEV_STRONG;
 
         ByzantineBroadcastSimulation simulation = new ByzantineBroadcastSimulation(numberOfNodes, numberOfByzantineNodes, protocol);

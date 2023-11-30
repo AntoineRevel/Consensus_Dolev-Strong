@@ -1,6 +1,6 @@
 public class DolevStrongNodeFactory extends AbstractNodeFactory {
     public DolevStrongNodeFactory(int numberOfNodes, int numberOfByzantineNodes) {
-        super(numberOfNodes, numberOfByzantineNodes, numberOfByzantineNodes);
+        super(numberOfNodes, numberOfByzantineNodes, numberOfByzantineNodes +1);
     }
 
     @Override
